@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import React, { FocusEventHandler, useRef, useState } from "react";
+import { KeepCard } from "../components/KeepCard";
 import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import useClickOutside from "../hooks/useClickOutside";
 import styles from "../styles/Home.module.css";
@@ -29,6 +30,8 @@ export default function Home() {
     if (event.key === "Enter" || event.key === "Escape") {
       const element = event.target as HTMLDivElement;
       element.blur();
+      setISActive(false);
+      textAreaRef.current?.blur();
     }
   };
 
@@ -36,7 +39,7 @@ export default function Home() {
     if (title == "" || value == "") {
       setISActive(false);
     }
-    if(title != "" && value != ""){
+    if (title != "" && value != "") {
       setValue("");
       setTitle("");
       setISActive(false);
@@ -49,34 +52,44 @@ export default function Home() {
       setValue("");
       setTitle("");
       setISActive(false);
+    } else {
+      if ((title == "" || value == "") && event.key != null) {
+        setISActive(false);
+      }
     }
   };
   return (
-    <div
-      onClick={() => {
-        setISActive(true);
-      }}
-      className="bg-red-500 w-[300px]   h-auto m-auto flex flex-col justify-center items-center mt-[104px] rounded-xl"
-      onKeyDown={onKeyDown}
-      onBlur={onBlur}
-      ref={squareBoxRef}
-    >
-      <input
-        onChange={handleTitleChange}
-        className={classNames(
-          isActive ? "block" : "hidden",
-          "bg-slate-500 w-[300px] text-2xl   rounded-xl px-[16px] py-[12px] resize-none overflow-x-hidden outline-none appearance-none "
-        )}
-        placeholder="Title"
-        value={title}
-      />
-      <textarea
-        ref={textAreaRef}
-        onChange={handleChange}
-        className="bg-slate-500 w-[300px] text-2xl  h-auto rounded-xl px-[16px] py-[12px] resize-none overflow-x-hidden outline-none appearance-none"
-        placeholder="Take a note..."
-        value={value}
-      />
+    <div>
+      <div
+        onClick={() => {
+          setISActive(true);
+        }}
+        className="w-[300px]   h-auto m-auto flex flex-col justify-center items-center mt-[104px] rounded-xl"
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+        ref={squareBoxRef}
+      >
+        <input
+          onChange={handleTitleChange}
+          className={classNames(
+            isActive ? "block" : "hidden",
+            "bg-slate-500 w-[300px] text-2xl   rounded-xl px-[16px] py-[12px] resize-none overflow-x-hidden outline-none appearance-none "
+          )}
+          placeholder="Title"
+          value={title}
+        />
+        <textarea
+          onClick={() => {
+            setISActive(true);
+          }}
+          ref={textAreaRef}
+          onChange={handleChange}
+          className="bg-slate-500 w-[300px] text-2xl  h-auto rounded-xl px-[16px] py-[12px] resize-none overflow-x-hidden outline-none appearance-none"
+          placeholder="Take a note..."
+          value={value}
+        />
+      </div>
+      <KeepCard />
     </div>
   );
 }
