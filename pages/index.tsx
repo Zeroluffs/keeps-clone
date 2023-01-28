@@ -6,7 +6,7 @@ import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import useClickOutside from "../hooks/useClickOutside";
 import styles from "../styles/Home.module.css";
 import { classNames } from "../utils/JoinClassName";
-
+import { handleSubmit } from "../handlers/handlesubmit";
 export default function Home() {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
@@ -58,9 +58,21 @@ export default function Home() {
       }
     }
   };
+  const dataRef = useRef<HTMLInputElement>(null);
+  const submithandler = async (e: any) => {
+    e.preventDefault();
+    await handleSubmit(dataRef!!.current!!.value);
+    dataRef!!.current!!.value = "";
+  };
   return (
     <div>
-      <div
+      <div className="">
+        <form onSubmit={submithandler}>
+          <input type="text" ref={dataRef} />
+          <button type="submit">Save</button>
+        </form>
+      </div>
+      {/* <div
         onClick={() => {
           setISActive(true);
         }}
@@ -89,7 +101,7 @@ export default function Home() {
           value={value}
         />
       </div>
-      <KeepCard />
+      <KeepCard /> */}
     </div>
   );
 }
